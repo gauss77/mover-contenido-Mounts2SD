@@ -232,3 +232,42 @@ Screen Shots
 ![Applications](https://raw.github.com/SpazeDog/mounts2sd/3.x/screenshots/overview_dark_land.png) : 
 ![Applications](https://raw.github.com/SpazeDog/mounts2sd/3.x/screenshots/configure_dark_land_dialog.png) 
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Foramtting SD CARD using adb shell
+Connect the phone with PC and enable USB debugging mode (inside developer's options menu)
+
+Install adb and open in terminal
+
+Now perform the following commands:
+
+# to connect the phone to adb shell. Click allow on the prompt appear on the phone
+adb shell
+
+# checking if format as internal storage option is available or not
+sm has-adoptable
+
+# if above command is false, then type the following command otherwise skip it
+sm set-force-adoptable on
+
+# now we will check the disk
+sm list-disks
+
+# select the disk uuid, it will be something like: disk:179,32
+# now we will partition the sd card. Choose the command according to the need
+sm partition disk:179,32 private # only as extended internal storage
+sm partition disk:179,32 public # only as external storage
+sm partition disk:179,32 mixed 60 # only 60% as internal and rest 40% as external
+
+# now we will list the volumes to format it
+sm list-volumes
+
+# choose the disk and format it, the uuid of the disk would be something like: private:179,34
+sm format private:179,34
+
+# now mount the disk
+sm mount private:179,34
+
+# now disable the force-adoptable
+sm set-force-adoptable off
+Now restart the phone and you would be able to see that internal storage has expanded.
